@@ -60,6 +60,7 @@ Uint16 inputsource=DSK6713_AIC23_INPUT_LINE; // Selection de l'entrée LINE IN
 #define DROIT  1 // Définition du haut-parleur droit
 union {Uint32 uint; short channel[2];} AIC23_data; // Pour contenir les deux signaux
 
+#ifndef TEST_BUILD
 void main() 
 {
 	afficherMenu();		// Affichage du menu principal à l'écran
@@ -80,6 +81,7 @@ void main()
 		}
 	}
 }
+#endif
 
 // Attente en sec. (approximatif)
 void attendre(float seconds)
