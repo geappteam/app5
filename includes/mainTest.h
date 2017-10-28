@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "mainTest.h"
 #include "main_accordeur.h"
 #include "genCos.h"

@@ -33,6 +33,9 @@ void main(){
         }
 
         printf("%s\r\n", result.message);
+
+        free(result.message);
+        free(result.test);
     }
 
     printf("\r\nEnd of tests: %d passed, %d failed\r\n\r\n", nbPassed, nbFailed);
@@ -43,14 +46,36 @@ void main(){
 
 
 TestResult testCos(){
-    float angle = 1.0;
-    genCos(1.0, &angle);
-
     TestResult res = {
         PASS,
         "Cosine function testCos()",
         "Test result description."
     };
+
+    const float tolerance = 0.05;
+
+    float in_angles[] = {0, PI/4, PI/2};
+    float out_expected[] = {1, 0.70710678118, 0};
+    float out_cos[sizeof(in_angles)/sizeof(float)];
+
+    int i;
+    for (i = 0; i < sizeof(in_angles)/sizeof(float); ++i){
+        float anglePtr = 0;
+        out_cos[i] = genCos(in_angles[i], &anglePtr);
+
+        if(abs(out_cos[i] - out_expected[i]) > tolerance)
+            res.passed = FAIL;
+    }
+
+    char *message = (char*)malloc(sizeof(out_cos)/sizeof(float) * sizeof(char) * 100);
+
+    for(i = 0; i < sizeof(out_cos)/sizeof(float); ++i) {
+        char line[100];
+        snprintf(line, 100, "\tcos( %.4f ) = %.4f\r\n", in_angles[i], out_expected[i]);
+        strncat(message, line, 100);
+    }
+
+    res.message = message;
 
     return res;
 }
