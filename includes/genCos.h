@@ -15,6 +15,7 @@
 
 #define PI 3.14159265358979
 
+
 /*************************************************************
  Liste des prototypes de fonction
 *************************************************************/
@@ -25,5 +26,10 @@ float genCos(float deltaAngle, float *anglePtr);
 
 // DESCRIPTION : Permet de garder l'angle entre 0 et 2pi
 void fixAngle(float *a_ptr);
+
+float cosTable (float angle);
+float cosTaylor (float angle);
+float cosDiff (float angle);
+float cosRotate (float angle);
 
 #endif /* GENCOS_H_ */

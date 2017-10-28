@@ -25,12 +25,14 @@ typedef struct{
 
 
 TestResult testCos(void);
+TestResult testCosTable(void);
 TestResult sampleTest(void);
 
 
 TestResult (*testRoutines[]) (void) = {
     sampleTest,
-    testCos
+    testCos,
+    testCosTable
 };
 
 
