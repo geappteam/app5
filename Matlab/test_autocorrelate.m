@@ -3,7 +3,7 @@ close all
 clc
 
 %% Test autocorrelation with the use of FFT and IFFT
-nb_data = 50;
+nb_data = 256;
 
 %%Uncomment line below if it needs 
 %%a number of data of power of 2 (realistic)

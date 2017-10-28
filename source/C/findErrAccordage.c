@@ -156,3 +156,26 @@ float getF0(float xx[], float fDesirer) {
 	return f0;	
 } 
 
+/************************************************************************
+  Créateur:    Anthony Parris, ing., Ph. D.
+  Date:        27 octobre 2017
+    Revisions:
+  DESCRIPTION :
+     Effectue l'autocorrélation du tampon circulaire d'échantillons
+  ENTRÉE
+     bloc[] : bloc d'échantillons sur lequel l'autocorrélation sera
+     effectuée.
+  SORTIE
+     resultat[] : Tableau 1xL_BLOC contenant le résultat de
+     l'autocorrélation.
+***********************************************************************/
+void faireAutocorr_fft(float bloc[], float resultat[]) {
+    //1 - Ajouter les zéros
+
+    //2 - FFT
+    //if()
+    //3 - Absolue de la FFT
+    //4 - Carrée de l'absolue de la FFT
+    //5 - Inverse de la FFT
+    //6 - Retourner le résultat
+}

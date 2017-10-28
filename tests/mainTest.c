@@ -88,3 +88,44 @@ TestResult sampleTest(){
     };
     return res;
 }
+
+TestResult testFaireAutocorr_fft(){
+    TestResult res = {
+        FAIL,
+        "faireAutocorr_fft",
+        " Test the autocorrelation implemented in C.\n Export a 'txt' file to compare algorithms in Matlab."
+    };
+
+    // Buffer samples
+    float samples[L_TAMPON];
+
+    //TODO: LOAD MATLAB VALUES INSTEAD
+    //...
+
+    // Autocorrelation's results
+    float autocorr[L_TAMPON];
+
+    // Hanning window applied
+    int i;
+    for (i=0;i<L_TAMPON;i++) {
+//        samples[i] = FENETRE_HAN[i]*samples[i]; //TODO: DEBUG
+    }
+
+    //Function tested
+    faireAutocorr_fft(samples, autocorr);
+
+    FILE *f = fopen("test_autocorrelation_results_C.txt", "w");
+    if (f == NULL)
+    {
+        printf("Error opening file!\n");
+        return res;
+    }
+
+    // Print in text file for Matlab
+    for(i = 0 ; i < L_TAMPON ; ++i)
+        fprintf(f, "%f\n", autocorr[i]);
+
+    fclose(f);
+
+    return res;
+}

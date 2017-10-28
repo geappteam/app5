@@ -14,6 +14,8 @@
 #include "mainTest.h"
 #include "main_accordeur.h"
 #include "genCos.h"
+#include "findErrAccordage.h"
+#include "CONSTANTES.h"
 
 typedef enum{PASS, FAIL} Success;
 
@@ -26,11 +28,13 @@ typedef struct{
 
 TestResult testCos(void);
 TestResult sampleTest(void);
+TestResult testFaireAutocorr_fft(void);
 
 
 TestResult (*testRoutines[]) (void) = {
+    testCos,
     sampleTest,
-    testCos
+    testFaireAutocorr_fft
 };
 
 
