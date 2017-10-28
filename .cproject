@@ -42,6 +42,7 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C6000_7.4.compilerID.DIAG_WRAP.1512457897" name="Wrap diagnostic messages (--diag_wrap)" superClass="com.ti.ccstudio.buildDefinitions.C6000_7.4.compilerID.DIAG_WRAP" value="com.ti.ccstudio.buildDefinitions.C6000_7.4.compilerID.DIAG_WRAP.off" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C6000_7.4.compilerID.INCLUDE_PATH.862443601" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.C6000_7.4.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;C:\ti\ccsv7\ccs_base\C6xCSL\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ti\ccsv7\ccs_base\C6700\dsplib\include&quot;"/>
 									<listOptionValue builtIn="false" value="C:/ti/ccsv7/tools/compiler/c6000_7.4.20/include"/>
 									<listOptionValue builtIn="false" value="C:/ti/dsk6713/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/includes}&quot;"/>
@@ -69,6 +70,7 @@
 									<listOptionValue builtIn="false" value="&quot;C:\ti\ccsv7\tools\compiler\c6000_7.4.20\lib\rts6700.lib&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\ccsv7\ccs_base\C6xCSL\lib_3x\csl6713.lib&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\dsk6713\lib\dsk6713bsl.lib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ti\ccsv7\ccs_base\C6700\dsplib\lib\dsp67x.lib&quot;"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.C6000_7.4.linkerID.STACK_SIZE.746544365" name="Set C system stack size (--stack_size, -stack)" superClass="com.ti.ccstudio.buildDefinitions.C6000_7.4.linkerID.STACK_SIZE" value="0x8000" valueType="string"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C6000_7.4.linkerID.HEAP_SIZE.1157316522" name="Heap size for C/C++ dynamic memory allocation (--heap_size, -heap)" superClass="com.ti.ccstudio.buildDefinitions.C6000_7.4.linkerID.HEAP_SIZE" value="0x8000" valueType="string"/>

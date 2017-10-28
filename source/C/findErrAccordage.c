@@ -28,6 +28,8 @@
 #include "findErrAccordage.h"
 #include "fenetreHanning.h" // Fenêtre de Hanning pré-calculée
 #include "CONSTANTES.h"		  // Constantes partagées
+#include "DSPF_sp_cfftr2_dit.h"
+#include "DSPF_sp_cfftr4_dif.h"
 
 float findErrAccordage(float bloc[], float frqDesiree) {
 
@@ -173,7 +175,21 @@ void faireAutocorr_fft(float bloc[], float resultat[]) {
     //1 - Ajouter les zéros
 
     //2 - FFT
-    //if()
+    // Fill with pairs of complexe values
+    float*bloc_cplx = (float*)malloc(2*sizeof(bloc));
+
+    int i;
+    for (i = 0 ; i < L_TAMPON ; i++ ){
+        if(i%2 == 0)
+            bloc_cplx[i] = bloc[i/2];
+        else
+            bloc_cplx[i] = 0;
+    }
+    double remainder = fmod(sqrt((double)L_TAMPON),1.0);
+//    if(remainder == 0)
+//        DSPF_sp_cfftr4_dif(x, w, n);
+//    else
+//        DSPF_sp_cfftr2_dit(x, w, n);
     //3 - Absolue de la FFT
     //4 - Carrée de l'absolue de la FFT
     //5 - Inverse de la FFT
