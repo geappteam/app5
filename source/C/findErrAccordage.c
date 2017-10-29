@@ -30,6 +30,7 @@
 #include "CONSTANTES.h"		  // Constantes partagées
 #include "DSPF_sp_cfftr2_dit.h"
 #include "DSPF_sp_cfftr4_dif.h"
+#include "twiddle_APP5.h"
 
 float findErrAccordage(float bloc[], float frqDesiree) {
 
@@ -172,9 +173,7 @@ float getF0(float xx[], float fDesirer) {
      l'autocorrélation.
 ***********************************************************************/
 void faireAutocorr_fft(float bloc[], float resultat[]) {
-    //1 - Ajouter les zéros
-
-    //2 - FFT
+    //1 - FFT
     // Fill with pairs of complexe values
     float*bloc_cplx = (float*)malloc(2*sizeof(bloc));
 
@@ -185,13 +184,31 @@ void faireAutocorr_fft(float bloc[], float resultat[]) {
         else
             bloc_cplx[i] = 0;
     }
+
     double remainder = fmod(sqrt((double)L_TAMPON),1.0);
-//    if(remainder == 0)
-//        DSPF_sp_cfftr4_dif(x, w, n);
-//    else
-//        DSPF_sp_cfftr2_dit(x, w, n);
-    //3 - Absolue de la FFT
-    //4 - Carrée de l'absolue de la FFT
-    //5 - Inverse de la FFT
-    //6 - Retourner le résultat
+    if(remainder > 0){
+        DSPF_sp_cfftr4_dif(bloc_cplx, w, L_TAMPON);
+    }
+    else{
+        DSPF_sp_cfftr2_dit(bloc_cplx, w, L_TAMPON);
+    }
+
+    //2 - Square of magnitude of the FFT
+    for (i = 0 ; i < L_TAMPON ; i++ ){
+        bloc_cplx[2*i] = sqrt(pow(bloc_cplx[2*i], 2) + pow(bloc_cplx[2*i+1], 2));
+        bloc_cplx[2*i+1] = 0;
+    }
+
+    //3 - Invert FFT
+    if(remainder > 0){
+        DSPF_sp_cfftr4_dif(bloc_cplx, w, L_TAMPON);
+    }
+    else{
+        DSPF_sp_cfftr2_dit(bloc_cplx, w, L_TAMPON);
+    }
+
+    //4 - Return results
+    for (i = 0 ; i < L_TAMPON ; i++ ){
+        resultat[i] = bloc_cplx[2*i];
+    }
 }

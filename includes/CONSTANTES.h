@@ -19,6 +19,15 @@
 #ifndef FS
 #define FS 8000			// Fréquence d'échantillonnage
 //#define FS 7417			// Fréquence d'échantillonnage
+
+#ifndef MIN_SIG_MAG
+#define MIN_SIG_MAG 0.0     // Minimal practical value of signal assumed
+#endif
+
+#ifndef MAX_SIG_MAG
+#define MAX_SIG_MAG 5.0     // Maximal practical value of signal assumed
+#endif
+
 #endif
 
 #endif /* CONSTANTES_H_ */

@@ -61,7 +61,7 @@ Uint16 inputsource=DSK6713_AIC23_INPUT_LINE; // Selection de l'entrée LINE IN
 union {Uint32 uint; short channel[2];} AIC23_data; // Pour contenir les deux signaux
 
 #ifndef TEST_BUILD
-void main() 
+void main()
 {
 	afficherMenu();		// Affichage du menu principal à l'écran
 	initAccordeur();	// Initialisations des variables et du hardware

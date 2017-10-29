@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "mainTest.h"
 #include "main_accordeur.h"
 #include "genCos.h"
@@ -25,18 +26,24 @@ typedef struct{
     char *message;
 } TestResult;
 
+float generateRandomFloat(double min, double max);
+void generateRandomSignalValues(float* signal, short length);
+
+void printValuesTxtFile(float* values, short length, char* filePathName);
 
 TestResult testCos(void);
 TestResult testCosTable(void);
 TestResult sampleTest(void);
-TestResult testFaireAutocorr_fft(void);
+TestResult testprintValuesTxtFile(void);
+//TestResult testFaireAutocorr_fft(void);
 
 
 TestResult (*testRoutines[]) (void) = {
     testCos,
     sampleTest,
     testCosTable,
-    testFaireAutocorr_fft
+    testprintValuesTxtFile,
+    //testFaireAutocorr_fft
 };
 
 

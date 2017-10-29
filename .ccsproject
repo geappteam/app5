@@ -5,7 +5,7 @@
 	<deviceFamily value="C6000"/>
 	<deviceEndianness value="little"/>
 	<isElfFormat value="false"/>
-	<connection value="common/targetdb/connections/tisim_connection.xml"/>
+	<connection value="common/targetdb/connections/SDDSKUSB_Connection.xml"/>
 	<rts value="libc.a"/>
 	<templateProperties value="id=com.ti.common.project.core.emptyProjectWithMainTemplate,"/>
 	<isTargetManual value="true"/>

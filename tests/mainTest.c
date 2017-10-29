@@ -42,6 +42,33 @@ void main(){
 }
 #endif
 
+float generateRandomFloat(double min, double max){
+    srand(time(NULL));
+    return (rand()/(double)RAND_MAX)*(max-min)+min;
+}
+
+void generateRandomSignalValues(float* signal, short length){
+    float value;
+    int i;
+    for(i = 0; i<length; i++)
+        value = generateRandomFloat(MIN_SIG_MAG, MAX_SIG_MAG);
+        signal[i] = value;
+}
+
+void printValuesTxtFile(float* values, short length, char* filePathName){
+    FILE *f = fopen(filePathName, "w");
+    if (f == NULL){
+        printf("Error opening file!\n");
+        return ;
+    }
+
+    int i;
+
+    for(i = 0 ; i < length ; ++i)
+        fprintf(f, "%f\n", values[i]);
+
+    fclose(f);
+}
 
 TestResult testCos(){
     TestResult res = {
@@ -121,6 +148,19 @@ TestResult sampleTest(){
     return res;
 }
 
+TestResult testprintValuesTxtFile(){
+    TestResult res = {
+        FAIL,
+        "testprintValuesTxtFile",
+        "Test if the function properly print values in a txt file."
+    };
+
+    float values[] = {1.00, 4.60, 558.323, 32.9201};
+    printValuesTxtFile(values, sizeof(values)/sizeof(float), "test.txt");
+
+    return res;
+}
+
 TestResult testFaireAutocorr_fft(){
     TestResult res = {
         FAIL,
@@ -128,36 +168,25 @@ TestResult testFaireAutocorr_fft(){
         " Test the autocorrelation implemented in C.\n Export a 'txt' file to compare algorithms in Matlab."
     };
 
-    // Buffer samples
+    // Buffer samples initialized
     float samples[L_TAMPON];
+    generateRandomSignalValues(samples, L_TAMPON);
 
-    //TODO: LOAD MATLAB VALUES INSTEAD
-    //...
-
-    // Autocorrelation's results
-    float autocorr[L_TAMPON];
+    // Print values used for autocorrelation for Matlab
+    printValuesTxtFile(samples, L_TAMPON, "../Matlab/pre_autocorrelation_values_C.txt");
 
     // Hanning window applied
-    int i;
-    for (i=0;i<L_TAMPON;i++) {
+//    int i;
+//    for (i=0;i<L_TAMPON;i++) {
 //        samples[i] = FENETRE_HAN[i]*samples[i]; //TODO: DEBUG
-    }
+//    }
 
     //Function tested
+    float autocorr[L_TAMPON];
     faireAutocorr_fft(samples, autocorr);
 
-    FILE *f = fopen("test_autocorrelation_results_C.txt", "w");
-    if (f == NULL)
-    {
-        printf("Error opening file!\n");
-        return res;
-    }
-
-    // Print in text file for Matlab
-    for(i = 0 ; i < L_TAMPON ; ++i)
-        fprintf(f, "%f\n", autocorr[i]);
-
-    fclose(f);
+    // Print results for Matlab comparisons
+    printValuesTxtFile(autocorr, L_TAMPON, "../Matlab/autocorrelation_results_C.txt");
 
     return res;
 }
