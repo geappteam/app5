@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 #include "mainTest.h"
 #include "main_accordeur.h"
 #include "genCos.h"
@@ -31,17 +32,20 @@ void generateRandomSignalValues(float* signal, short length);
 
 void printValuesTxtFile(float* values, short length, char* filePathName);
 
-TestResult testCos(void);
+TestResult testGenCos(void);
+TestResult verifyCosFunction(float (*cosFunction)(float));
 TestResult testCosTable(void);
+TestResult testCosTaylor(void);
 TestResult sampleTest(void);
 TestResult testprintValuesTxtFile(void);
 //TestResult testFaireAutocorr_fft(void);
 
 
 TestResult (*testRoutines[]) (void) = {
-    testCos,
     sampleTest,
+    testGenCos,
     testCosTable,
+    testCosTaylor,
     testprintValuesTxtFile,
     //testFaireAutocorr_fft
 };

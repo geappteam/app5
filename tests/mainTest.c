@@ -70,14 +70,14 @@ void printValuesTxtFile(float* values, short length, char* filePathName){
     fclose(f);
 }
 
-TestResult testCos(){
+TestResult testGenCos(){
     TestResult res = {
         PASS,
         "Cosine function testCos()",
         "Test result description."
     };
 
-    const float tolerance = 0.05;
+    const float tolerance = 0.01;
 
     float in_angles[] = {0, PI/4, PI/2};
     float out_expected[] = {1, 0.70710678118, 0};
@@ -93,9 +93,10 @@ TestResult testCos(){
     }
 
     char *message = (char*)malloc(sizeof(out_cos)/sizeof(float) * sizeof(char) * 30);
+    memset(message, '\0', sizeof(message));
 
     for(i = 0; i < sizeof(out_cos)/sizeof(float); ++i) {
-        char line[30]={0};
+        char line[30]={'\0'};
         snprintf(line, 30, "\tcos( %.4f ) = %.4f\r\n", in_angles[i], out_expected[i]);
         strncat(message, line, 30);
     }
@@ -105,36 +106,55 @@ TestResult testCos(){
     return res;
 }
 
-TestResult testCosTable(){
+TestResult verifyCosFunction(float (*cosFunction)(float)){
+
     TestResult res = {
         PASS,
-        "Table Cosine function",
-        "\0"
+        "Cosine function test",
+        "Test result description."
     };
 
-    const float tolerance = 0.05;
+    const float tolerance = 0.01;
 
-    float in_angles[] = {0, PI/4, PI/2};
-    float out_expected[] = {1, 0.70710678118, 0};
+    float in_angles[] = {0, PI/6, PI/3, PI/4, PI/2, 3*PI/4, 5*PI/4, 7*PI/4, 2*PI};
+    float out_expected[sizeof(in_angles)/sizeof(float)];
     float out_cos[sizeof(in_angles)/sizeof(float)];
 
     int i;
     for (i = 0; i < sizeof(in_angles)/sizeof(float); ++i){
-        out_cos[i] = cosTable(in_angles[i]);
+        out_expected[i] = cos(in_angles[i]);
+        out_cos[i] = cosFunction(in_angles[i]);
 
         if(abs(out_cos[i] - out_expected[i]) > tolerance)
             res.passed = FAIL;
     }
 
     char *message = (char*)malloc(sizeof(out_cos)/sizeof(float) * sizeof(char) * 30);
+    memset(message, '\0', sizeof(message));
 
     for(i = 0; i < sizeof(out_cos)/sizeof(float); ++i) {
-        char line[30]={0};
+        char line[30]={'\0'};
         snprintf(line, 30, "\tcos( %.4f ) = %.4f\r\n", in_angles[i], out_expected[i]);
         strncat(message, line, 30);
     }
 
     res.message = message;
+
+    return res;
+}
+
+TestResult testCosTable() {
+    TestResult res = verifyCosFunction(cosTable);
+
+    res.test = "Table Cosine function";
+
+    return res;
+}
+
+TestResult testCosTaylor() {
+    TestResult res = verifyCosFunction(cosTaylor);
+
+    res.test = "Taylor Series Cosine function";
 
     return res;
 }

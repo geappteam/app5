@@ -47,6 +47,18 @@ float sinTable[16] = {
     0.098017140329561
 };
 
+float cosTaylorDenominators[8] = { // 1/(2n)!
+    1.0,    // 1/0!
+    0.5,
+    0.041666666666667,
+    0.001388888888889,
+    2.480158730158730e-05,
+    2.755731922398589e-07,
+    2.087675698786810e-09,
+    1.147074559772973e-11,  // 1/(2*7)!
+};
+
+float computeTaylorCos(float teta, int nbTerms);
 
 /***********************************************************
  Permet de garder l'angle entre 0 et 2pi
@@ -93,7 +105,31 @@ float cosTable (float angle) {
 }
 
 float cosTaylor (float angle) {
-    return 0;
+
+    // On utilise les trois premiers termes
+    if (angle >= (3.0f/2.0f)*PI)
+        return computeTaylorCos((2*PI)-angle, 3);
+    if (angle >= PI)
+        return -computeTaylorCos(angle-PI, 3);
+    if (angle >= PI/2.0f)
+        return -computeTaylorCos(PI-angle, 3);
+    return computeTaylorCos(angle, 3);
+}
+
+float computeTaylorCos(float teta, int nbTerms) {
+    // sum (-1)^n * (angle^(2*n))/((2*n)!) , where n=0 to +infinity
+
+    float sum = cosTaylorDenominators[0];
+    float angleSquare = teta*teta;
+    float numerator = 1.0;
+
+    int k;
+    for(k = 1; k < nbTerms; ++k) {
+        numerator *= -angleSquare;
+        sum += numerator * cosTaylorDenominators[k];
+    }
+
+    return sum;
 }
 
 float cosDiff (float angle) {
