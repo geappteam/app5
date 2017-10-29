@@ -2,6 +2,9 @@ clear all
 close all
 clc
 %% Low-Pass Biquad Filters generation
+% Nb of filters to do
+NbFilt = 6;
+
 %Fondamental frequencies of each guitare cords
 FO_CORD1 = 82.407;
 FO_CORD2 = 110.000;
@@ -40,6 +43,10 @@ figure()
 freqz(b,a);
 title('Frequency response of the filter IIR Biquad for cord 1')
 
+%Convert values in 2Q13 form
+sos1 = round(sos1*2^13);
+gain_global1 = round(gain_global1.*2^13);
+
 %% CORD 2
 %Filter order (N) 4
 [A2 B2 C2 D2] = cheby1(N, oscillation_dB, fc(FO_CORD2)/fNyq);
@@ -54,6 +61,10 @@ title('Poles and zeros of the filter IIR Biquad for cord 2')
 figure()
 freqz(b,a);
 title('Frequency response of the filter IIR Biquad for cord 2')
+
+%Convert values in 2Q13 form
+sos2 = round(sos2*2^13);
+gain_global2 = round(gain_global2.*2^13);
 
 %% CORD 3
 %Filter order (N) 4
@@ -70,6 +81,10 @@ figure()
 freqz(b,a);
 title('Frequency response of the filter IIR Biquad for cord 3')
 
+%Convert values in 2Q13 form
+sos3 = round(sos3*2^13);
+gain_global3 = round(gain_global3.*2^13);
+
 %% CORD 4
 %Filter order (N) 4
 [A4 B4 C4 D4] = cheby1(N, oscillation_dB, fc(FO_CORD4)/fNyq);
@@ -84,6 +99,10 @@ title('Poles and zeros of the filter IIR Biquad for cord 4')
 figure()
 freqz(b,a);
 title('Frequency response of the filter IIR Biquad for cord 4')
+
+%Convert values in 2Q13 form
+sos4 = round(sos4*2^13);
+gain_global4 = round(gain_global4.*2^13);
 
 %% CORD 5
 %Filter order (N) 4
@@ -100,6 +119,10 @@ figure()
 freqz(b,a);
 title('Frequency response of the filter IIR Biquad for cord 5')
 
+%Convert values in 2Q13 form
+sos5 = round(sos5*2^13);
+gain_global5 = round(gain_global5.*2^13);
+
 %% CORD 6
 %Filter order (N) 4
 [A6 B6 C6 D6] = cheby1(N, oscillation_dB, fc(FO_CORD6)/fNyq);
@@ -114,3 +137,20 @@ title('Poles and zeros of the filter IIR Biquad for cord 6')
 figure()
 freqz(b,a);
 title('Frequency response of the filter IIR Biquad for cord 6')
+
+%Convert values in 2Q13 form
+sos6 = round(sos6*2^13);
+gain_global6 = round(gain_global6.*2^13);
+
+%% Write txt file of the coefficients values 
+fileID = fopen('coeffsIIR.txt','w');
+
+sos = [sos1;sos2;sos3;sos4;sos5;sos6];
+
+for i = 1:NbFilt
+    fprintf(fileID, '//FILTER %d,\n',i);
+    fprintf(fileID, '{%d, %d, %d, %d, %d, %d},\n',sos(2*i-1,1),sos(2*i-1,2),sos(2*i-1,3),sos(2*i-1,4),sos(2*i-1,5),sos(2*i-1,6));
+    fprintf(fileID, '{%d, %d, %d, %d, %d, %d}',sos(2*i,1),sos(2*i,2),sos(2*i,3),sos(2*i,4),sos(2*i,5),sos(2*i,6));
+    fprintf(fileID, '\n\n');
+end
+fclose(fileID);
