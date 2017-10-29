@@ -65,7 +65,7 @@ void printValuesTxtFile(float* values, short length, char* filePathName){
     int i;
 
     for(i = 0 ; i < length ; ++i)
-        fprintf(f, "%f\n", values[i]);
+        fprintf(f, "%f\r\n", values[i]);
 
     fclose(f);
 }
