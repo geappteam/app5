@@ -26,7 +26,7 @@ float genCos(float deltaAngle, float *anglePtr);
 float genCosTab(float deltaAngle, float *angle_Ptr);
 float genCosTaylor(float deltaAngle, float *angle_Ptr);
 float genCosDiff(int corde);
-float genCosDiff(int corde, float *reel_Ptr, float *imag_Ptr);
+float genCosRotate(int corde, float *reel_Ptr, float *imag_Ptr);
 
 // DESCRIPTION : Permet de garder l'angle entre 0 et 2pi
 void fixAngle(float *a_ptr);

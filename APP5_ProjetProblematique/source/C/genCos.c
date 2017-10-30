@@ -74,7 +74,7 @@ float deltaRell[6] = {
     0.9881751552424869f,
     0.9812510075889724f,
     0.9666749469498814f
-}
+};
 
 float deltaImag[6] = {
     0.0646771227685294f,
@@ -83,7 +83,7 @@ float deltaImag[6] = {
     0.153329261921810f,
     0.192734169533133f,
     0.256006927522370f
-}
+};
 
 float computeTaylorCos(float teta, int nbTerms);
 
@@ -118,7 +118,7 @@ float genCosTab(float deltaAngle, float *angle_Ptr) {
     *angle_Ptr = (*angle_Ptr + deltaAngle);
     fixAngle(angle_Ptr);
 
-    return = cosTable(*angle_Ptr);
+    return cosTable(*angle_Ptr);
 }
 
 // Using Taylor Series
@@ -127,7 +127,7 @@ float genCosTaylor(float deltaAngle, float *angle_Ptr) {
     *angle_Ptr = (*angle_Ptr + deltaAngle);
     fixAngle(angle_Ptr);
 
-    return = cosTaylor(*angle_Ptr);
+    return cosTaylor(*angle_Ptr);
 }
 
 
@@ -143,7 +143,6 @@ float genCosDiff(int corde) {
         a1 = diffEquationParams[corde][0];
         yBuffer[0] = diffEquationParams[corde][1];
         yBuffer[1] = diffEquationParams[corde][2];
-        *angle_Ptr = 0;
     }
 
     float nextSample = a1 * yBuffer[0] - yBuffer[1];
@@ -157,8 +156,6 @@ float genCosDiff(int corde) {
 
 // Using the rotating vector
 float genCosRotate(int corde, float *reel_Ptr, float *imag_Ptr) {
-    
-    static int lastCorde = -1;
 
     float nReel = deltaRell[corde] * *reel_Ptr - deltaImag[corde] * *imag_Ptr;
     float nImag = deltaRell[corde] * *imag_Ptr + deltaImag[corde] * *reel_Ptr;
