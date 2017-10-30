@@ -70,48 +70,13 @@ void printValuesTxtFile(float* values, short length, char* filePathName){
     fclose(f);
 }
 
-TestResult testGenCos(){
-    TestResult res = {
-        PASS,
-        "Cosine function testCos()",
-        "Test result description."
-    };
-
-    const float tolerance = 0.01;
-
-    float in_angles[] = {0, PI/4, PI/2};
-    float out_expected[] = {1, 0.70710678118, 0};
-    float out_cos[sizeof(in_angles)/sizeof(float)];
-
-    int i;
-    for (i = 0; i < sizeof(in_angles)/sizeof(float); ++i){
-        float anglePtr = 0;
-        out_cos[i] = genCos(in_angles[i], &anglePtr);
-
-        if(abs(out_cos[i] - out_expected[i]) > tolerance)
-            res.passed = FAIL;
-    }
-
-    char *message = (char*)malloc(sizeof(out_cos)/sizeof(float) * sizeof(char) * 30);
-    memset(message, '\0', sizeof(message));
-
-    for(i = 0; i < sizeof(out_cos)/sizeof(float); ++i) {
-        char line[30]={'\0'};
-        snprintf(line, 30, "\tcos( %.4f ) = %.4f\r\n", in_angles[i], out_expected[i]);
-        strncat(message, line, 30);
-    }
-
-    res.message = message;
-
-    return res;
-}
 
 TestResult verifyCosFunction(float (*cosFunction)(float)){
 
     TestResult res = {
         PASS,
         "Cosine function test",
-        "Test result description."
+        NULL
     };
 
     const float tolerance = 0.01;
@@ -208,5 +173,30 @@ TestResult testFaireAutocorr_fft(){
     // Print results for Matlab comparisons
     printValuesTxtFile(autocorr, L_TAMPON, "../Matlab/autocorrelation_results_C.txt");
 
+    return res;
+}
+
+
+TestResult testGenCosTable(void){
+    TestResult res = {
+       PASS,
+       "Cosine Discrete signal from Table",
+       NULL
+    };
+
+    char message[256];
+    memset(message, '\0', sizeof(message));
+
+    float tolerance = 0.05f;
+
+    float refSample[512];
+    float testSample[sizeof(refSample)];
+
+    int corde = 0;
+
+    // Creating a signal for every string
+    for (corde = 0; corde < sizeof(refSample); ++corde);
+
+    res.message = message;
     return res;
 }

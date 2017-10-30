@@ -32,23 +32,35 @@ void generateRandomSignalValues(float* signal, short length);
 
 void printValuesTxtFile(float* values, short length, char* filePathName);
 
-TestResult testGenCos(void);
+/*
+ * Test procedures
+ */
+TestResult sampleTest(void);
+
+// Test pure cosine functions
 TestResult verifyCosFunction(float (*cosFunction)(float));
 TestResult testCosTable(void);
 TestResult testCosTaylor(void);
-TestResult sampleTest(void);
+
+// Sin Signal generation tests
+TestResult testGenCosTable(void);
+TestResult testGenCosTaylor(void);
+TestResult testGenCosDiff(void);
+TestResult testGenCosRotate(void);
+
+
 TestResult testprintValuesTxtFile(void);
 //TestResult testFaireAutocorr_fft(void);
 
 
+// Add test procedures to this array to execute them
 TestResult (*testRoutines[]) (void) = {
     sampleTest,
-    testGenCos,
     testCosTable,
     testCosTaylor,
     testprintValuesTxtFile,
+    testGenCosTable
     //testFaireAutocorr_fft
 };
-
 
 #endif /* INCLUDES_MAINTEST_H_ */
