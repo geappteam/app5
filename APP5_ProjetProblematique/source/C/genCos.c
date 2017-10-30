@@ -1,29 +1,28 @@
 /* genCos.c */
 /*
-  Créateur:    Bruno Gagnon, M. Sc.A
+  Crï¿½ateur:    Bruno Gagnon, M. Sc.A
   Date:        7 juin 2009
   Revisions:   
 
   DESCRIPTION : 
-     Permet de générer un signal sinusoïdal en utilisant la 
-     fonction cosinus de la librairie standard <math.h>
+     Permet de gï¿½nï¿½rer un signal sinusoï¿½dal en utilisant differents algorithmes
 
-  ENTRÉE : 
+  ENTRï¿½E : 
      deltaAngle : valeur de 2*PI*f/Fs
 
-  ENTRÉE/SORTIE :
+  ENTRï¿½E/SORTIE :
 	 angle_Ptr : Pointeur sur l'angle courant de la fonction cos. 
 	             Normalement, ce pointeur doit pointer sur une variable 
 	             statique ou globale.
 
   RETOUR : 
-	 Amplitude de l'échantillon courrant pour la génération du signal.
+	 Amplitude de l'ï¿½chantillon courrant pour la gï¿½nï¿½ration du signal.
 	 
 */
 
 #include <stdio.h>
 #include <math.h>
-#include "CONSTANTES.h" // Constantes partagées
+#include "CONSTANTES.h" // Constantes partagï¿½es
 #include "genCos.h"
 #include "float.h"
 
@@ -58,6 +57,34 @@ float cosTaylorDenominators[8] = { // 1/(2n)!
     1.147074559772973e-11,  // 1/(2*7)!
 };
 
+float diffEquationParams[6][3] = {
+    // {a1, y(n-1), y(n-2)}
+    {1.9958124859719508f, 0.9979062429859754f, 0.9916337395807692f}, 
+    {1.9925407526362018f, 0.9962703763181009f, 0.9851093254580207f}, 
+    {1.9867156608163248f, 0.9933578304081624f, 0.9735195584664229f}, 
+    {1.9763503104849738f, 0.9881751552424869f, 0.9529802748770261f}, 
+    {1.9625020151779449f, 0.9812510075889724f, 0.9257070797887472f}, 
+    {1.9333498938997629f, 0.9666749469498814f, 0.8689209061211122f}
+};
+
+float deltaRell[6] = {
+    0.9979062429859754f,
+    0.9962703763181009f,
+    0.9933578304081624f,
+    0.9881751552424869f,
+    0.9812510075889724f,
+    0.9666749469498814f
+}
+
+float deltaImag[6] = {
+    0.0646771227685294f,
+    0.0862863678166468f,
+    0.115066158216865f,
+    0.153329261921810f,
+    0.192734169533133f,
+    0.256006927522370f
+}
+
 float computeTaylorCos(float teta, int nbTerms);
 
 /***********************************************************
@@ -74,19 +101,72 @@ void fixAngle(float *a_Ptr) {
 
 float genCos(float deltaAngle, float *angle_Ptr) {
 
-	float out; // échantillon de sortie
+	float out; // ï¿½chantillon de sortie
 
-	*angle_Ptr = ( *angle_Ptr + deltaAngle ); // calcul de l'angle de l'éch. actuel
+	*angle_Ptr = ( *angle_Ptr + deltaAngle ); // calcul de l'angle de l'ï¿½ch. actuel
 	fixAngle(angle_Ptr);		// permet de garder l'angle entre 0 et 2pi
 
-	// Alternatives cosinus
 	out = cos(*angle_Ptr);          // from math.h
-	//out = cosTable(*angle_Ptr);     // from a precalculated table
-	//out = cosTaylor(*angle_Ptr);    // from Taylor series
-	//out = cosDiff(*angle_Ptr);      // from difference equation
-	//out = cosRotate(*angle_Ptr);    // from rotating vector algorithm
 
 	return out;
+}
+
+
+// Generates similar output using a table of precalculated values
+float genCosTab(float deltaAngle, float *angle_Ptr) {
+
+    *angle_Ptr = (*angle_Ptr + deltaAngle);
+    fixAngle(angle_Ptr);
+
+    return = cosTable(*angle_Ptr);
+}
+
+// Using Taylor Series
+float genCosTaylor(float deltaAngle, float *angle_Ptr) {
+
+    *angle_Ptr = (*angle_Ptr + deltaAngle);
+    fixAngle(angle_Ptr);
+
+    return = cosTaylor(*angle_Ptr);
+}
+
+
+// Using a meta stable differrence equation
+float genCosDiff(int corde) {
+    
+    static int lastCorde = -1;
+    static float a1;
+    static float yBuffer[2];
+
+    if (corde != lastCorde) {
+        lastCorde = corde;
+        a1 = diffEquationParams[corde][0];
+        yBuffer[0] = diffEquationParams[corde][1];
+        yBuffer[1] = diffEquationParams[corde][2];
+        *angle_Ptr = 0;
+    }
+
+    float nextSample = a1 * yBuffer[0] - yBuffer[1];
+
+    yBuffer[1] = yBuffer[0];
+    yBuffer[0] = nextSample;
+
+    return nextSample;
+}
+
+
+// Using the rotating vector
+float genCosRotate(int corde, float *reel_Ptr, float *imag_Ptr) {
+    
+    static int lastCorde = -1;
+
+    float nReel = deltaRell[corde] * *reel_Ptr - deltaImag[corde] * *imag_Ptr;
+    float nImag = deltaRell[corde] * *imag_Ptr + deltaImag[corde] * *reel_Ptr;
+
+    *reel_Ptr = nReel;
+    *imag_Ptr = nImag;
+
+    return nReel;
 }
 
 
@@ -130,12 +210,4 @@ float computeTaylorCos(float teta, int nbTerms) {
     }
 
     return sum;
-}
-
-float cosDiff (float angle) {
-    return 0;
-}
-
-float cosRotate (float angle) {
-    return 0;
 }

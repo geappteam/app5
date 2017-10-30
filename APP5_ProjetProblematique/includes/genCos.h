@@ -1,11 +1,11 @@
 /* genCos.h */
 /*
-  Créateur:    Bruno Gagnon, M. Sc.A
+  Crï¿½ateur:    Bruno Gagnon, M. Sc.A
   Date:        7 juin 2009
   Revisions:   
 
   DESCRIPTION : 
-     Permet de générer un signal sinusoïdal en utilisant la 
+     Permet de gï¿½nï¿½rer un signal sinusoï¿½dal en utilisant la 
      fonction cosinus de la librairie standard <math.h>
 */
 
@@ -20,9 +20,13 @@
  Liste des prototypes de fonction
 *************************************************************/
 
-// DESCRIPTION : Génération de l'amplitude de l'éch. à l'aide de la fonction cos de 
+// DESCRIPTION : Gï¿½nï¿½ration de l'amplitude de l'ï¿½ch. ï¿½ l'aide de la fonction cos de 
 // la librairie standard <math.h>
 float genCos(float deltaAngle, float *anglePtr);
+float genCosTab(float deltaAngle, float *angle_Ptr);
+float genCosTaylor(float deltaAngle, float *angle_Ptr);
+float genCosDiff(int corde);
+float genCosDiff(int corde, float *reel_Ptr, float *imag_Ptr);
 
 // DESCRIPTION : Permet de garder l'angle entre 0 et 2pi
 void fixAngle(float *a_ptr);
