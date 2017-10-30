@@ -1,28 +1,28 @@
 /* genCos.c */
 /*
-  Cr�ateur:    Bruno Gagnon, M. Sc.A
+  Créateur:    Bruno Gagnon, M. Sc.A
   Date:        7 juin 2009
   Revisions:   
 
   DESCRIPTION : 
-     Permet de g�n�rer un signal sinuso�dal en utilisant differents algorithmes
+     Permet de générer un signal sinusoïdal en utilisant differents algorithmes
 
-  ENTR�E : 
+  ENTRÉE : 
      deltaAngle : valeur de 2*PI*f/Fs
 
-  ENTR�E/SORTIE :
+  ENTRÉE/SORTIE :
 	 angle_Ptr : Pointeur sur l'angle courant de la fonction cos. 
 	             Normalement, ce pointeur doit pointer sur une variable 
 	             statique ou globale.
 
   RETOUR : 
-	 Amplitude de l'�chantillon courrant pour la g�n�ration du signal.
+	 Amplitude de l'échantillon courrant pour la génération du signal.
 	 
 */
 
 #include <stdio.h>
 #include <math.h>
-#include "CONSTANTES.h" // Constantes partag�es
+#include "CONSTANTES.h" // Constantes partagées
 #include "genCos.h"
 #include "float.h"
 
@@ -101,9 +101,9 @@ void fixAngle(float *a_Ptr) {
 
 float genCos(float deltaAngle, float *angle_Ptr) {
 
-	float out; // �chantillon de sortie
+	float out; // échantillon de sortie
 
-	*angle_Ptr = ( *angle_Ptr + deltaAngle ); // calcul de l'angle de l'�ch. actuel
+	*angle_Ptr = ( *angle_Ptr + deltaAngle ); // calcul de l'angle de l'éch. actuel
 	fixAngle(angle_Ptr);		// permet de garder l'angle entre 0 et 2pi
 
 	out = cos(*angle_Ptr);          // from math.h
