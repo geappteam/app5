@@ -374,8 +374,11 @@ TestResult filtreC_FIR() {
     {
         short input = rand() - (RAND_MAX>>1);
 
-        short out0 = standardFIR(cPtr0, input, CoeffsFIR, FIRNbCOEFFS, sampleBuffer0, 128);
-        short out1 = hp_optimizedFIR(cPtr1, input, CoeffsFIR, FIRNbCOEFFS_FOLDED, sampleBuffer1, 128);
+        short out0;
+        short out1;
+
+        standardFIR(cPtr0, input, CoeffsFIR, FIRNbCOEFFS, sampleBuffer0, 128, &out0);
+        hp_optimizedFIR(cPtr1, input, CoeffsFIR, FIRNbCOEFFS_FOLDED, sampleBuffer1, 128, &out1);
 
         if (*cPtr0 != *cPtr1) {
             res.message = "Failed to put input in circular buffer";

@@ -7,7 +7,7 @@
  *  This file provides the implementation of the original FIR filter along side an optimized version
  */
 
-short standardFIR(short *cPtr, short ech, const short coeffs[], short N, short tampon[], short L)
+short* standardFIR(short *cPtr, short ech, const short coeffs[], short N, short tampon[], short L, short* y)
 {
     int k;
     int out=0; // Doit être un int pour accepter le Q30
@@ -33,10 +33,12 @@ short standardFIR(short *cPtr, short ech, const short coeffs[], short N, short t
             p = tampon+L-1;    // Remettre l'adresse à la fin du tampon
     }
 
-    return out >> 15; // décalage arithméthique à droite pour passer de Q30 à Q15
+    *y = out >> 15; // décalage arithméthique à droite pour passer de Q30 à Q15
+
+    return cPtr;
 }
 
-short hp_optimizedFIR(short *cPtr, short ech, const short coeffsPlie[], short Nplie, short tampon[], short L)
+short* hp_optimizedFIR(short *cPtr, short ech, const short coeffsPlie[], short Nplie, short tampon[], short L, short* y)
 {
     ++cPtr;                                 if (cPtr >= tampon+L) cPtr = tampon;
     *cPtr = ech;
@@ -55,5 +57,7 @@ short hp_optimizedFIR(short *cPtr, short ech, const short coeffsPlie[], short Np
 
     sum += (*coeffsPlie) * (*tail);
 
-    return sum >> 15;
+    *y = sum >> 15;
+
+    return cPtr;
 }
