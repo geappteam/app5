@@ -356,7 +356,7 @@ TestResult filtreC_FIR() {
     TestResult res = {
        PASS,
        "Optimized FIR filter in C",
-       "\tSignals match"
+       "\tTest Finished"
     };
 
     short * sampleBuffer0  = (short*)memalign(128*sizeof(short), 128*sizeof(short));
@@ -381,13 +381,11 @@ TestResult filtreC_FIR() {
         hp_optimizedFIR(cPtr1, input, CoeffsFIR, FIRNbCOEFFS_FOLDED, sampleBuffer1, 128, &out1);
 
         if (*cPtr0 != *cPtr1) {
-            res.message = "Failed to put input in circular buffer";
             res.passed = FAIL;
             return res;
         }
 
         if (out0 != out1) {
-            res.message = "Filter gives different results";
             res.passed = FAIL;
             return res;
         }
@@ -395,6 +393,48 @@ TestResult filtreC_FIR() {
 
     free(sampleBuffer0);
     free(sampleBuffer1);
+
+    return res;
+}
+
+TestResult filtreASM_FIR() {
+    TestResult res = {
+       PASS,
+       "Optimized FIR filter in ASM",
+       "\tFinished test"
+    };
+
+    short * sampleBuffer0  = (short*)memalign(128*sizeof(short), 128*sizeof(short));
+    short * sampleBuffer1  = (short*)memalign(128*sizeof(short), 128*sizeof(short));
+
+    memset(sampleBuffer0, 0, 128*sizeof(short));
+    memset(sampleBuffer1, 0, 128*sizeof(short));
+
+    short * cPtr0 = sampleBuffer0;
+    short * cPtr1 = sampleBuffer1;
+
+    srand(time(NULL));
+    int i;
+    for (i = 0; i < 1024; ++i)
+    {
+        short input = rand() - (RAND_MAX>>1);
+
+        short out0;
+        short out1;
+
+        cPtr0 = standardFIR(cPtr0, input, CoeffsFIR, FIRNbCOEFFS, sampleBuffer0, 128, &out0);
+        cPtr1 = hp_asmFIR(cPtr1, input, CoeffsFIR, FIRNbCOEFFS_FOLDED, sampleBuffer1, 128, &out1);
+
+        if (*cPtr0 != *cPtr1) {
+            res.passed = FAIL;
+            return res;
+        }
+
+        if (out0 != out1) {
+            res.passed = FAIL;
+            return res;
+        }
+    }
 
     return res;
 }

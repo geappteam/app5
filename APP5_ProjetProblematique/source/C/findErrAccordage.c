@@ -51,7 +51,7 @@ float findErrAccordage(float bloc[], float frqDesiree) {
 	// Autocorrélation
 	//
 	// VOTRE **SOLUTION** D'AUTOCORRÉLATION PAR FFT REMPLACE LA PROCHAINE LIGNE!!!
-	faireAutocorr(bloc, autocorr);
+	faireAutocorr_fft(bloc, autocorr);
 	//
 	//
 

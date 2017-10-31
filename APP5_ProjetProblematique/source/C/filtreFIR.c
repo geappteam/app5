@@ -40,19 +40,21 @@ short* standardFIR(short *cPtr, short ech, const short coeffs[], short N, short 
 
 short* hp_optimizedFIR(short *cPtr, short ech, const short coeffsPlie[], short Nplie, short tampon[], short L, short* y)
 {
-    ++cPtr;                                 if (cPtr >= tampon+L) cPtr = tampon;
+    ++cPtr;
+    if (cPtr >= tampon+L) cPtr = tampon;
     *cPtr = ech;
 
     int sum = 0;
 
-    short * tail = cPtr - 2*(Nplie-1);      if(tail < tampon) tail += L;
+    short * tail = cPtr - 2*(Nplie-1);
+    if(tail < tampon) tail += L;
     short * head = cPtr;
 
     while (tail != head){
         sum += (*coeffsPlie++) * ((*tail++)+(*head--));
 
-                                            if(tail >= tampon+L) tail -= L;
-                                            if(head < tampon) head += L;
+        if(tail >= tampon+L) tail -= L;
+        if(head < tampon) head += L;
     }
 
     sum += (*coeffsPlie) * (*tail);

@@ -39,6 +39,7 @@ TestResult testGenCosRotate(void);
 
 // FIR filter test procedures
 TestResult filtreC_FIR(void);
+TestResult filtreASM_FIR(void);
 
 TestResult testprintValuesTxtFile(void);
 //TestResult testFaireAutocorr_fft(void);
@@ -54,7 +55,8 @@ TestResult (*testRoutines[]) (void) = {
     testGenCosTaylor,
     testGenCosDiff,
     testGenCosRotate,
-    filtreC_FIR
+    filtreC_FIR,
+    filtreASM_FIR
     //testFaireAutocorr_fft
 };
 
