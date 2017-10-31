@@ -50,10 +50,10 @@ short hp_optimizedFIR(short *cPtr, short ech, const short coeffsPlie[], short Np
         sum += (*coeffsPlie++) * ((*tail++)+(*head--));
 
                                             if(tail >= tampon+L) tail -= L;
-                                            if(head < tampon) tail += L;
+                                            if(head < tampon) head += L;
     }
 
     sum += (*coeffsPlie) * (*tail);
 
-    return sum << 15;
+    return sum >> 15;
 }

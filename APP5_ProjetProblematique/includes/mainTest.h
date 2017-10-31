@@ -37,6 +37,9 @@ TestResult testGenCosDiff(void);
 TestResult testGenCosRotate(void);
 
 
+// FIR filter test procedures
+TestResult filtreC_FIR(void);
+
 TestResult testprintValuesTxtFile(void);
 //TestResult testFaireAutocorr_fft(void);
 
@@ -50,7 +53,8 @@ TestResult (*testRoutines[]) (void) = {
     testGenCosTab,
     testGenCosTaylor,
     testGenCosDiff,
-    testGenCosRotate
+    testGenCosRotate,
+    filtreC_FIR
     //testFaireAutocorr_fft
 };
 

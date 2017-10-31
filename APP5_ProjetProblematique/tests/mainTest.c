@@ -17,6 +17,7 @@
 #include "CONSTANTES.h"
 #include "filtreFIR.h"
 #include "mainTest.h"
+#include "coeffsFIR.dat"
 
 extern float DeltaAngle[6];
 
@@ -355,10 +356,42 @@ TestResult filtreC_FIR() {
     TestResult res = {
        PASS,
        "Optimized FIR filter in C",
-       "\0"
+       "\tSignals match"
     };
 
-    hp_optimizedFIR(0, 0, 0, 0, 0, 0);
+    short * sampleBuffer0  = (short*)memalign(128*sizeof(short), 128*sizeof(short));
+    short * sampleBuffer1  = (short*)memalign(128*sizeof(short), 128*sizeof(short));
+
+    memset(sampleBuffer0, 0, 128*sizeof(short));
+    memset(sampleBuffer1, 0, 128*sizeof(short));
+
+    short * cPtr0 = sampleBuffer0;
+    short * cPtr1 = sampleBuffer1;
+
+    srand(time(NULL));
+    int i;
+    for (i = 0; i < 1024; ++i)
+    {
+        short input = rand() - (RAND_MAX>>1);
+
+        short out0 = standardFIR(cPtr0, input, CoeffsFIR, FIRNbCOEFFS, sampleBuffer0, 128);
+        short out1 = hp_optimizedFIR(cPtr1, input, CoeffsFIR, FIRNbCOEFFS_FOLDED, sampleBuffer1, 128);
+
+        if (*cPtr0 != *cPtr1) {
+            res.message = "Failed to put input in circular buffer";
+            res.passed = FAIL;
+            return res;
+        }
+
+        if (out0 != out1) {
+            res.message = "Filter gives different results";
+            res.passed = FAIL;
+            return res;
+        }
+    }
+
+    free(sampleBuffer0);
+    free(sampleBuffer1);
 
     return res;
 }
