@@ -15,6 +15,7 @@
 #include "genCos.h"
 #include "findErrAccordage.h"
 #include "CONSTANTES.h"
+#include "filtreFIR.h"
 #include "mainTest.h"
 
 extern float DeltaAngle[6];
@@ -346,6 +347,18 @@ TestResult testGenCosRotate(void){
 
         angleR = angleR+0;
     }
+
+    return res;
+}
+
+TestResult filtreC_FIR() {
+    TestResult res = {
+       PASS,
+       "Optimized FIR filter in C",
+       "\0"
+    };
+
+    hp_optimizedFIR(0, 0, 0, 0, 0, 0);
 
     return res;
 }
