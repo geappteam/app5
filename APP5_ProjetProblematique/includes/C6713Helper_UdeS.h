@@ -10,8 +10,6 @@
 
 #include "dsk6713_aic23.h"
 
-typedef unsigned long   Uint32; //TODO: Remove when possible
-
 void comm_poll();
 void CODEC_start();
 void CODEC_stop();

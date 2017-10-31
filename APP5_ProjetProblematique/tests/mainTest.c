@@ -5,7 +5,19 @@
  *      Author: dene2303
  */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
+#include "main_accordeur.h"
 #include "mainTest.h"
+#include "genCos.h"
+#include "findErrAccordage.h"
+#include "CONSTANTES.h"
+#include "mainTest.h"
+
+extern float DeltaAngle[6];
 
 #ifdef TEST_BUILD
 void main(){
@@ -79,7 +91,7 @@ TestResult verifyCosFunction(float (*cosFunction)(float)){
         NULL
     };
 
-    const float tolerance = 0.01;
+    const float tolerance = 0.1;
 
     float in_angles[] = {0, PI/6, PI/3, PI/4, PI/2, 3*PI/4, 5*PI/4, 7*PI/4, 2*PI};
     float out_expected[sizeof(in_angles)/sizeof(float)];
@@ -90,17 +102,17 @@ TestResult verifyCosFunction(float (*cosFunction)(float)){
         out_expected[i] = cos(in_angles[i]);
         out_cos[i] = cosFunction(in_angles[i]);
 
-        if(abs(out_cos[i] - out_expected[i]) > tolerance)
+        if(fabs(out_cos[i] - out_expected[i]) > tolerance)
             res.passed = FAIL;
     }
 
-    char *message = (char*)malloc(sizeof(out_cos)/sizeof(float) * sizeof(char) * 30);
+    char *message = (char*)malloc(sizeof(out_cos)/sizeof(float) * sizeof(char) * 48);
     memset(message, '\0', sizeof(message));
 
     for(i = 0; i < sizeof(out_cos)/sizeof(float); ++i) {
-        char line[30]={'\0'};
-        snprintf(line, 30, "\tcos( %.4f ) = %.4f\r\n", in_angles[i], out_expected[i]);
-        strncat(message, line, 30);
+        char line[48]={'\0'};
+        snprintf(line, sizeof(line), "\tcos( %.4f ) = %.4f (%.4f)\r\n", in_angles[i], out_cos[i], out_expected[i]);
+        strncat(message, line, sizeof(line));
     }
 
     res.message = message;
@@ -177,26 +189,163 @@ TestResult testFaireAutocorr_fft(){
 }
 
 
-TestResult testGenCosTable(void){
+TestResult testGenCosTab(void){
     TestResult res = {
        PASS,
        "Cosine Discrete signal from Table",
-       NULL
+       "\tSignal corresponds"
     };
 
-    char message[256];
-    memset(message, '\0', sizeof(message));
+    char *message = (char*)malloc(64);
+    memset(message, '\0', 64);
 
-    float tolerance = 0.05f;
-
-    float refSample[512];
-    float testSample[sizeof(refSample)];
+    const float tolerance = 0.1f;
+    const int nbSamples = 512;
 
     int corde = 0;
 
     // Creating a signal for every string
-    for (corde = 0; corde < sizeof(refSample); ++corde);
+    for (corde = 0; corde < 6; ++corde) {
 
-    res.message = message;
+        float angleR = 0;
+        float angleT = 0;
+
+        int s;
+        for (s = 0; s < nbSamples; ++s){
+            float expected = genCos(DeltaAngle[corde], &angleR);
+            float result = genCosTab(DeltaAngle[corde], &angleT);
+
+            if (fabs(result-expected) > tolerance) {
+                res.passed = FAIL;
+                snprintf(message, 64, "Failed to generate sample %d of string %d", s, corde);
+                res.message = message;
+                return res;
+            }
+        }
+    }
+
+    return res;
+}
+
+TestResult testGenCosTaylor(void){
+    TestResult res = {
+       PASS,
+       "Cosine Discrete signal from Taylor Series",
+       "\tSignal corresponds"
+    };
+
+    char *message = (char*)malloc(64);
+    memset(message, '\0', 64);
+
+    const float tolerance = 0.05f;
+    const int nbSamples = 512;
+
+    int corde = 0;
+
+    // Creating a signal for every string
+    for (corde = 0; corde < 6; ++corde) {
+
+        float angleR = 0;
+        float angleT = 0;
+
+        int s;
+        for (s = 0; s < nbSamples; ++s){
+            float expected = genCos(DeltaAngle[corde], &angleR);
+            float result = genCosTaylor(DeltaAngle[corde], &angleT);
+
+            if (fabs(result-expected) > tolerance) {
+                res.passed = FAIL;
+                snprintf(message, 64, "Failed to generate sample %d of string %d", s, corde);
+                res.message = message;
+                return res;
+            }
+        }
+    }
+
+    return res;
+}
+
+TestResult testGenCosDiff(void){
+    TestResult res = {
+       PASS,
+       "Cosine Discrete signal from Difference equation",
+       "\tSignal corresponds"
+    };
+
+    char *message = (char*)malloc(64);
+    memset(message, '\0', 64);
+
+    const float tolerance = 0.5f;
+    const int nbSamples = 512;
+
+    int corde = 0;
+
+    // Creating a signal for every string
+    for (corde = 0; corde < 6; ++corde) {
+
+        float angleR = 0;
+        float expected;
+        float result;
+
+        int s;
+        for (s = 0; s < nbSamples; ++s){
+            expected = genCos(DeltaAngle[corde], &angleR);
+            result = genCosDiff(corde);
+
+            if (fabs(result-expected) > tolerance) {
+                res.passed = FAIL;
+                snprintf(message, 64, "Failed to generate sample %d of string %d", s, corde);
+                res.message = message;
+                return res;
+            }
+        }
+
+        angleR = angleR+0;
+    }
+
+    return res;
+}
+
+TestResult testGenCosRotate(void){
+    TestResult res = {
+       PASS,
+       "Cosine Discrete signal from Rotating vector algorithm",
+       "\tSignal corresponds"
+    };
+
+    char *message = (char*)malloc(64);
+    memset(message, '\0', 64);
+
+    const float tolerance = 0.2f;
+    const int nbSamples = 512;
+
+    int corde = 0;
+
+    // Creating a signal for every string
+    for (corde = 0; corde < 6; ++corde) {
+
+        float angleR = 0;
+        float expected;
+        float result;
+
+        float compReel = 1.0f;
+        float compImag = 0.0f;
+
+        int s;
+        for (s = 0; s < nbSamples; ++s){
+            expected = genCos(DeltaAngle[corde], &angleR);
+            result = genCosRotate(corde, &compReel, &compImag);
+
+            if (fabs(result-expected) > tolerance) {
+                res.passed = FAIL;
+                snprintf(message, 64, "Failed to generate sample %d of string %d", s, corde);
+                res.message = message;
+                return res;
+            }
+        }
+
+        angleR = angleR+0;
+    }
+
     return res;
 }

@@ -8,17 +8,6 @@
 #ifndef INCLUDES_MAINTEST_H_
 #define INCLUDES_MAINTEST_H_
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <math.h>
-#include "mainTest.h"
-#include "main_accordeur.h"
-#include "genCos.h"
-#include "findErrAccordage.h"
-#include "CONSTANTES.h"
-
 typedef enum{PASS, FAIL} Success;
 
 typedef struct{
@@ -38,12 +27,11 @@ void printValuesTxtFile(float* values, short length, char* filePathName);
 TestResult sampleTest(void);
 
 // Test pure cosine functions
-TestResult verifyCosFunction(float (*cosFunction)(float));
 TestResult testCosTable(void);
 TestResult testCosTaylor(void);
 
 // Sin Signal generation tests
-TestResult testGenCosTable(void);
+TestResult testGenCosTab(void);
 TestResult testGenCosTaylor(void);
 TestResult testGenCosDiff(void);
 TestResult testGenCosRotate(void);
@@ -59,8 +47,14 @@ TestResult (*testRoutines[]) (void) = {
     testCosTable,
     testCosTaylor,
     testprintValuesTxtFile,
-    testGenCosTable
+    testGenCosTab,
+    testGenCosTaylor,
+    testGenCosDiff,
+    testGenCosRotate
     //testFaireAutocorr_fft
 };
+
+// Verification routines leveraged by test procedures
+TestResult verifyCosFunction(float (*cosFunction)(float));
 
 #endif /* INCLUDES_MAINTEST_H_ */
